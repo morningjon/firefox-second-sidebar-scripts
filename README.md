@@ -6,14 +6,14 @@ A one-command installation script to add a second sidebar with web panels to Fir
 
 This script automates the installation of:
 
-    fx-autoconfig by MrOtherGuy
-    firefox-second-sidebar by aminought
+fx-autoconfig by MrOtherGuy
+firefox-second-sidebar by aminought
 
 Inspired by:
 
-    Microsoft Edge's sidebar functionality
-    Vivaldi's web panels
-    Floorp Browser's web panel implementation
+Microsoft Edge's sidebar functionality
+Vivaldi's web panels
+Floorp Browser's web panel implementation
 
 ## What This Does
 
