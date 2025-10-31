@@ -4,6 +4,17 @@ A one-command installation script to add a second sidebar with web panels to Fir
 
 **Works on Windows, macOS, and Linux!**
 
+This script automates the installation of:
+
+    fx-autoconfig by MrOtherGuy
+    firefox-second-sidebar by aminought
+
+Inspired by:
+
+    Microsoft Edge's sidebar functionality
+    Vivaldi's web panels
+    Floorp Browser's web panel implementation
+
 ## What This Does
 
 This script gives you **two independent sidebars** in Firefox:
@@ -273,17 +284,6 @@ sudo rm /usr/lib/firefox/defaults/pref/config-prefs.js
 
 # Restart Firefox
 ```
-
-## Credits
-
-This script automates the installation of:
-- **[fx-autoconfig](https://github.com/MrOtherGuy/fx-autoconfig)** by MrOtherGuy
-- **[firefox-second-sidebar](https://github.com/aminought/firefox-second-sidebar)** by aminought
-
-Inspired by:
-- Microsoft Edge's sidebar functionality
-- Vivaldi's web panels
-- Floorp Browser's web panel implementation
 
 ## License
 
