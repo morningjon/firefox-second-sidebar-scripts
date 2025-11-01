@@ -15,6 +15,22 @@ Inspired by:
 - Vivaldi's web panels
 - Floorp Browser's web panel implementation
 
+## Disclaimer
+
+Only the Debian script has been tested and verified. If anyone uses these for other systems please report any issues or successes.
+
+Tested:
+
+✅ Debian/Ubuntu/Linux Mint
+
+Untested (needs community verification):
+
+❓ Arch/Manjaro
+❓ Fedora
+❓ openSUSE
+❓ macOS
+❓ Windows
+
 ## What This Does
 
 This script gives you **two independent sidebars** in Firefox:
