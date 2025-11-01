@@ -91,7 +91,7 @@ Check that Firefox.app is in `/Applications/` (not from Mac App Store)
 
 1. Download the PowerShell script:
    ```powershell
-   Invoke-WebRequest -Uri "https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-setup/main/setup-firefox-sidebar-windows.ps1" -OutFile "setup-firefox-sidebar-windows.ps1"
+   Invoke-WebRequest -Uri "https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-scripts/main/setup-firefox-sidebar-windows.ps1" -OutFile "setup-firefox-sidebar-windows.ps1"
    ```
 
 2. Right-click PowerShell and select **"Run as Administrator"**
@@ -108,7 +108,7 @@ Check that Firefox.app is in `/Applications/` (not from Mac App Store)
 
 1. Open Terminal and download the script:
    ```bash
-   curl -O https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-setup/main/setup-firefox-sidebar-macos.sh
+   curl -O https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-scripts/main/setup-firefox-sidebar-macos.sh
    ```
 
 2. Make it executable and run:
@@ -125,28 +125,28 @@ Choose your distribution:
 
 **Debian/Ubuntu/Linux Mint:**
 ```bash
-wget https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-setup/main/setup-firefox-sidebar-debian.sh
+wget https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-scripts/main/setup-firefox-sidebar-debian.sh
 chmod +x setup-firefox-sidebar-debian.sh
 ./setup-firefox-sidebar-debian.sh
 ```
 
 **Arch Linux/Manjaro:**
 ```bash
-wget https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-setup/main/setup-firefox-sidebar-arch.sh
+wget https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-scripts/main/setup-firefox-sidebar-arch.sh
 chmod +x setup-firefox-sidebar-arch.sh
 ./setup-firefox-sidebar-arch.sh
 ```
 
 **Fedora:**
 ```bash
-wget https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-setup/main/setup-firefox-sidebar-fedora.sh
+wget https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-scripts/main/setup-firefox-sidebar-fedora.sh
 chmod +x setup-firefox-sidebar-fedora.sh
 ./setup-firefox-sidebar-fedora.sh
 ```
 
 **openSUSE:**
 ```bash
-wget https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-setup/main/setup-firefox-sidebar-opensuse.sh
+wget https://raw.githubusercontent.com/morningjon/firefox-second-sidebar-scripts/main/setup-firefox-sidebar-opensuse.sh
 chmod +x setup-firefox-sidebar-opensuse.sh
 ./setup-firefox-sidebar-opensuse.sh
 ```
