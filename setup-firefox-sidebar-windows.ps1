@@ -99,16 +99,52 @@ if (-not (Test-Path "$tempDir\sidebar.zip")) {
 
 Expand-Archive -Path "$tempDir\sidebar.zip" -DestinationPath $tempDir -Force
 
-New-Item -ItemType Directory -Force -Path "$profilePath\chrome\JS" | Out-Null
-Copy-Item -Path "$tempDir\firefox-second-sidebar-master\src\*" -Destination "$profilePath\chrome\JS\" -Recurse -Force
+# Verify extraction
+if (-not (Test-Path "$tempDir\firefox-second-sidebar-master\src\second_sidebar.uc.mjs")) {
+    Write-Host "ERROR: Failed to extract second sidebar or files are missing" -ForegroundColor Red
+    Write-Host "Check $tempDir\firefox-second-sidebar-master\src\" -ForegroundColor Red
+    exit 1
+}
 
-# Verify installation
+New-Item -ItemType Directory -Force -Path "$profilePath\chrome\JS" | Out-Null
+
+# Copy with explicit error handling - copy directory contents, not the directory itself
+try {
+    $sourceDir = "$tempDir\firefox-second-sidebar-master\src"
+    Get-ChildItem -Path $sourceDir -Recurse | ForEach-Object {
+        $targetPath = $_.FullName.Replace($sourceDir, "$profilePath\chrome\JS")
+        if ($_.PSIsContainer) {
+            New-Item -ItemType Directory -Force -Path $targetPath -ErrorAction Stop | Out-Null
+        } else {
+            Copy-Item -Path $_.FullName -Destination $targetPath -Force -ErrorAction Stop
+        }
+    }
+} catch {
+    Write-Host "ERROR: Failed to copy second sidebar files" -ForegroundColor Red
+    Write-Host $_.Exception.Message -ForegroundColor Red
+    Write-Host "Source: $tempDir\firefox-second-sidebar-master\src" -ForegroundColor Red
+    Write-Host "Destination: $profilePath\chrome\JS\" -ForegroundColor Red
+    exit 1
+}
+
+# Verify installation with detailed check
 if (-not (Test-Path "$profilePath\chrome\JS\second_sidebar.uc.mjs")) {
     Write-Host "ERROR: second sidebar installation failed" -ForegroundColor Red
     Write-Host "Missing second_sidebar.uc.mjs in $profilePath\chrome\JS\" -ForegroundColor Red
+    Write-Host "" -ForegroundColor Red
+    Write-Host "Files in JS directory:" -ForegroundColor Yellow
+    Get-ChildItem "$profilePath\chrome\JS\" -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.Name)" -ForegroundColor Yellow }
     exit 1
 }
-Write-Host "✓ second sidebar installed" -ForegroundColor Green
+
+# Double-check the directory structure
+$jsFiles = Get-ChildItem "$profilePath\chrome\JS\" -Recurse -File | Measure-Object
+if ($jsFiles.Count -eq 0) {
+    Write-Host "ERROR: JS directory is empty" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "✓ second sidebar installed ($($jsFiles.Count) files copied)" -ForegroundColor Green
 Write-Host ""
 
 # Add required prefs
