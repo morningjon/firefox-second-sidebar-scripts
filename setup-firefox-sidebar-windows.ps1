@@ -32,21 +32,32 @@ Write-Host "Stopping Firefox..." -ForegroundColor Yellow
 Get-Process firefox -ErrorAction SilentlyContinue | Stop-Process -Force
 Start-Sleep -Seconds 2
 
-# Find Firefox profile
+# Find Firefox profile (most recently modified)
+Write-Host "Detecting Firefox profile..." -ForegroundColor Yellow
 $profileRoot = "$env:APPDATA\Mozilla\Firefox\Profiles"
-$profile = Get-ChildItem -Path $profileRoot -Filter "*.default-release" -ErrorAction SilentlyContinue | Select-Object -First 1
-if (-not $profile) {
-    $profile = Get-ChildItem -Path $profileRoot -Filter "*.default" -ErrorAction SilentlyContinue | Select-Object -First 1
-}
 
-if (-not $profile) {
-    Write-Host "ERROR: Firefox profile not found" -ForegroundColor Red
+if (-not (Test-Path $profileRoot)) {
+    Write-Host "ERROR: Firefox profiles directory not found" -ForegroundColor Red
     Write-Host "Please run Firefox at least once to create a profile" -ForegroundColor Yellow
     exit 1
 }
 
+$profiles = Get-ChildItem -Path $profileRoot -Directory | Where-Object { $_.Name -match "\.(default-release|default)$" } | Sort-Object LastWriteTime -Descending
+
+if ($profiles.Count -eq 0) {
+    Write-Host "ERROR: No Firefox profile found" -ForegroundColor Red
+    Write-Host "" -ForegroundColor Yellow
+    Write-Host "Available directories in $profileRoot :" -ForegroundColor Yellow
+    Get-ChildItem -Path $profileRoot -Directory | ForEach-Object { Write-Host "  $($_.Name)" -ForegroundColor Yellow }
+    Write-Host "" -ForegroundColor Yellow
+    Write-Host "Please run Firefox at least once to create a profile" -ForegroundColor Yellow
+    exit 1
+}
+
+$profile = $profiles[0]
 $profilePath = $profile.FullName
 Write-Host "Using profile: $profilePath" -ForegroundColor Green
+Write-Host ""
 
 # Download and extract fx-autoconfig
 Write-Host "Installing fx-autoconfig..." -ForegroundColor Yellow
@@ -54,6 +65,12 @@ $tempDir = "$env:TEMP\firefox-sidebar-setup"
 New-Item -ItemType Directory -Force -Path $tempDir | Out-Null
 
 Invoke-WebRequest -Uri "https://github.com/MrOtherGuy/fx-autoconfig/archive/refs/heads/master.zip" -OutFile "$tempDir\fx.zip"
+
+if (-not (Test-Path "$tempDir\fx.zip")) {
+    Write-Host "ERROR: Failed to download fx-autoconfig" -ForegroundColor Red
+    exit 1
+}
+
 Expand-Archive -Path "$tempDir\fx.zip" -DestinationPath $tempDir -Force
 
 # Copy fx-autoconfig files to profile
@@ -62,13 +79,37 @@ New-Item -ItemType Directory -Force -Path "$profilePath\chrome" | Out-Null
 Copy-Item -Path "$tempDir\fx-autoconfig-master\profile\chrome\utils" -Destination "$profilePath\chrome\" -Recurse -Force
 Copy-Item -Path "$tempDir\fx-autoconfig-master\profile\chrome\resources" -Destination "$profilePath\chrome\" -Recurse -Force
 
+# Verify installation
+if (-not (Test-Path "$profilePath\config.js") -or -not (Test-Path "$profilePath\chrome\utils")) {
+    Write-Host "ERROR: fx-autoconfig installation failed" -ForegroundColor Red
+    Write-Host "Missing files in $profilePath" -ForegroundColor Red
+    exit 1
+}
+Write-Host "✓ fx-autoconfig installed" -ForegroundColor Green
+Write-Host ""
+
 # Download and extract second sidebar
 Write-Host "Installing second sidebar..." -ForegroundColor Yellow
 Invoke-WebRequest -Uri "https://github.com/aminought/firefox-second-sidebar/archive/refs/heads/master.zip" -OutFile "$tempDir\sidebar.zip"
+
+if (-not (Test-Path "$tempDir\sidebar.zip")) {
+    Write-Host "ERROR: Failed to download second sidebar" -ForegroundColor Red
+    exit 1
+}
+
 Expand-Archive -Path "$tempDir\sidebar.zip" -DestinationPath $tempDir -Force
 
 New-Item -ItemType Directory -Force -Path "$profilePath\chrome\JS" | Out-Null
 Copy-Item -Path "$tempDir\firefox-second-sidebar-master\src\*" -Destination "$profilePath\chrome\JS\" -Recurse -Force
+
+# Verify installation
+if (-not (Test-Path "$profilePath\chrome\JS\second_sidebar.uc.mjs")) {
+    Write-Host "ERROR: second sidebar installation failed" -ForegroundColor Red
+    Write-Host "Missing second_sidebar.uc.mjs in $profilePath\chrome\JS\" -ForegroundColor Red
+    exit 1
+}
+Write-Host "✓ second sidebar installed" -ForegroundColor Green
+Write-Host ""
 
 # Add required prefs
 Write-Host "Configuring preferences..." -ForegroundColor Yellow
