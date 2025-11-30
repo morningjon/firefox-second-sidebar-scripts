@@ -22,14 +22,14 @@ Only the Debian script has been tested and verified. If anyone uses these for ot
 Tested:
 
 ✅ Debian/Ubuntu/Linux Mint
+✅ macOS
+✅ Windows
 
 Untested (needs community verification):
 
 ❓ Arch/Manjaro
 ❓ Fedora
 ❓ openSUSE
-❓ macOS
-❓ Windows
 
 ## What This Does
 
@@ -105,6 +105,8 @@ Check that Firefox.app is in `/Applications/` (not from Mac App Store)
 4. Restart Firefox
 
 ### macOS
+
+## You will need to disable SIP to run the installer
 
 1. Open Terminal and download the script:
    ```bash
