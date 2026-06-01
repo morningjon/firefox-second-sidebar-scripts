@@ -28,8 +28,8 @@ Tested:
 
 Untested (needs community verification):
 
-❓ Arch/Manjaro
-❓ Fedora
+❓ Arch/Manjaro (testing)
+❓ Fedora 44 (investigating) 
 ❓ openSUSE
 
 ## What This Does
