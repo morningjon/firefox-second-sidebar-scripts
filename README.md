@@ -11,8 +11,17 @@ A one-command installation script to add a second sidebar with web panels to Fir
 Firefox 147 adopted the [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/latest/), moving profile storage for new installs from `~/.mozilla/firefox/` to `~/.config/mozilla/firefox/`.
 
 All three scripts hardcoded the legacy path, so any fresh install on Firefox 147+ would immediately fail with:
+ERROR: Firefox profile not found.
+Available directories in ~/.mozilla/firefox/:
+Directory doesn't exist
 
-**Works on Windows, macOS, and Linux!**
+Existing users with a pre-existing `~/.mozilla` folder are unaffected — Firefox continues using the old path when it exists.
+
+### Fix
+
+Profile detection now searches both locations in a single pass and picks the most recently modified profile, preserving existing behaviour for legacy users while supporting new installs. The error message on failure now also lists both paths with their contents to aid diagnosis.
+
+**Works on Windows, macOS, and Arch Linux** (Windows and Mac OS not tested with Firefox 150)
 
 This script automates the installation of:
 
@@ -27,7 +36,8 @@ Inspired by:
 
 ## Disclaimer
 
-Only the Debian script has been tested and verified. If anyone uses these for other systems please report any issues or successes.
+Only the Arch script has been tested and verified. If anyone uses these for other systems please report any issues or successes.
+Windoes and MacOS worked on previous previous Firefox versions, but have not been tested with Firefox 150, however as the issue flagged was Linux path related i will leave these where they are until informed otherwise. 
 
 Tested:
 
@@ -37,7 +47,7 @@ Tested:
 
 Untested (needs community verification):
 
-❓ Devian
+❓ Debian
 ❓ Fedora 44
 ❓ openSUSE
 
