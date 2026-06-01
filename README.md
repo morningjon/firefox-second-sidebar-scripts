@@ -2,6 +2,16 @@
 
 A one-command installation script to add a second sidebar with web panels to Firefox, similar to Microsoft Edge, Vivaldi, or Floorp.
 
+## Fix Firefox profile detection for Firefox 147+ (XDG base dir)
+
+**Affects:** `setup-firefox-sidebar-arch.sh`, `setup-firefox-sidebar-debian.sh`, `setup-firefox-sidebar-fedora.sh`
+
+### Problem
+
+Firefox 147 adopted the [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/latest/), moving profile storage for new installs from `~/.mozilla/firefox/` to `~/.config/mozilla/firefox/`.
+
+All three scripts hardcoded the legacy path, so any fresh install on Firefox 147+ would immediately fail with:
+
 **Works on Windows, macOS, and Linux!**
 
 This script automates the installation of:
@@ -21,15 +31,14 @@ Only the Debian script has been tested and verified. If anyone uses these for ot
 
 Tested:
 
-✅ Debian/Ubuntu/Linux Mint
+✅ Arch
 ✅ macOS
 ✅ Windows
-✅ Fedora 43
 
 Untested (needs community verification):
 
-❓ Arch/Manjaro (testing)
-❓ Fedora 44 (investigating) 
+❓ Devian
+❓ Fedora 44
 ❓ openSUSE
 
 ## What This Does
