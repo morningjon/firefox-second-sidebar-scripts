@@ -27,14 +27,29 @@ killall firefox 2>/dev/null || true
 sleep 2
 
 # Find Firefox profile (most recently modified)
+# Firefox 147+ uses XDG Base Directory spec: ~/.config/mozilla/firefox on new installs.
+# Older installs (or migrated ones) still use ~/.mozilla/firefox.
+# We search both locations and pick the most recently modified profile.
 echo "Detecting Firefox profile..."
-PROFILE=$(find ~/.mozilla/firefox -maxdepth 1 -type d \( -name "*.default-release" -o -name "*.default" \) -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+
+XDG_FIREFOX_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/mozilla/firefox"
+LEGACY_FIREFOX_DIR="$HOME/.mozilla/firefox"
+
+PROFILE=$(
+    {
+        find "$XDG_FIREFOX_DIR" -maxdepth 1 -type d \( -name "*.default-release" -o -name "*.default" \) -printf '%T@ %p\n' 2>/dev/null
+        find "$LEGACY_FIREFOX_DIR" -maxdepth 1 -type d \( -name "*.default-release" -o -name "*.default" \) -printf '%T@ %p\n' 2>/dev/null
+    } | sort -rn | head -1 | cut -d' ' -f2-
+)
 
 if [ -z "$PROFILE" ]; then
     echo "ERROR: Firefox profile not found."
     echo ""
-    echo "Available directories in ~/.mozilla/firefox/:"
-    ls -la ~/.mozilla/firefox/ 2>/dev/null || echo "  Directory doesn't exist"
+    echo "Searched the following locations:"
+    echo "  XDG location (Firefox 147+): $XDG_FIREFOX_DIR"
+    ls -la "$XDG_FIREFOX_DIR" 2>/dev/null || echo "    Directory doesn't exist"
+    echo "  Legacy location:             $LEGACY_FIREFOX_DIR"
+    ls -la "$LEGACY_FIREFOX_DIR" 2>/dev/null || echo "    Directory doesn't exist"
     echo ""
     echo "Please run Firefox at least once to create a profile."
     exit 1
