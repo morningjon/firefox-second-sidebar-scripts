@@ -24,6 +24,7 @@ Tested:
 ✅ Debian/Ubuntu/Linux Mint
 ✅ macOS
 ✅ Windows
+✅ Fedora 43
 
 Untested (needs community verification):
 
